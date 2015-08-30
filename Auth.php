@@ -1,6 +1,11 @@
 <?php
 
 namespace thom855j\security ;
+use thom855j\sql\DB,
+    thom855j\security\Session,
+    thom855j\security\Cookie,
+    thom855j\security\Hash,
+    thom855j\security\Password;
 
 class Auth
 {
@@ -20,14 +25,18 @@ class Auth
             $_isLoggedIn ;
 
     public
-            function __construct($storage )
+            function __construct(DB $storage )
     {
+        // db connection
         $this->_storage      = $storage ;
+        // db tables
         $this->_users        = 'Users' ;
         $this->_roles        = 'Roles' ;
         $this->_sessions     = 'Sessions' ;
+        // session and cookie names
         $this->_sessionName  = 'User' ;
         $this->_cookieName   = 'Hash' ;
+        // life of cookie before exipry
         $this->_cookieExpiry = 1800 ;
 
         if ( Session::exists( $this->_sessionName ) )
@@ -45,8 +54,7 @@ class Auth
         }
     }
 
-    public static
-            function load( $params = null )
+    public static function load( $params = null )
     {
         if ( !isset( self::$_instance ) )
         {
@@ -55,15 +63,13 @@ class Auth
         return self::$_instance ;
     }
     
-    public
-            function setTable( $table, $name )
+    public function setTable( $table, $name )
     {
         $this->$table = $name;
     }
 
     //Find users
-    public
-            function search( $user = null )
+    public function search( $user = null )
     {
 
         if ( $user )
@@ -82,8 +88,7 @@ class Auth
     }
 
     //check if user exists
-    public
-            function exists()
+    public function exists()
     {
         return (!empty( $this->_data )) ? true : false ;
     }
