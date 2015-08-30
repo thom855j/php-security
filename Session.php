@@ -1,30 +1,34 @@
 <?php
-namespace thom855j\security;
+namespace thom855j\PHPSecurity;
 
 class Session
 {
 
     /**
-     * starts the session
+     * starts a session
      */
     public static
             function init()
     {
-        // if no session exist, start the session
-    
+        // if no session exist, start a new session
         if (session_id() == '')
         {
-            session_set_cookie_params(0);
             session_start();
         }
     }
 
+    /*
+     * Check if session exists or not
+     */
     public static
             function exists($name)
     {
         return (isset($_SESSION[$name])) ? true : false;
     }
-
+    
+    /*
+     * Set a session by key and value
+     */
     public static
             function set($key, $value)
     {
@@ -32,7 +36,7 @@ class Session
     }
 
     /**
-     * adds a value as a new array element to the key.
+     * Adds a value as a new array element to the key.
      * useful for collecting error messages etc
      *
      * @param mixed $key
@@ -44,30 +48,45 @@ class Session
         $_SESSION[$key][] = $value;
     }
 
+    /*
+     * Get a session value by key
+     */
     public static
             function get($key)
     {
         return $_SESSION[$key];
     }
-
+    
+/*
+ * Get a sessions array value by key and value
+ */
     public static
-            function getkey($key, $value)
+            function getKey($key, $name)
     {
-        return $_SESSION[$key][$value];
+        return $_SESSION[$key][$name];
     }
 
+    /*
+     * Delete key value from session array
+     */
     public static
-            function deletekey($key, $value)
+            function deleteKey($key, $value)
     {
         unset($_SESSION[$key][$value]);
     }
 
+    /*
+     * Arra push to arrays together
+     */
     public static
             function push($key, $value)
     {
         return array_push($_SESSION[$key], $value);
     }
 
+    /*
+     * Delete session by key name
+     */
     public static
             function delete($key)
     {
@@ -86,6 +105,9 @@ class Session
         session_destroy();
     }
 
+    /*
+     * Flash messages by deleting session after it is shown
+     */
     public static
             function flash($key, $string = null)
     {
@@ -111,8 +133,6 @@ class Session
             // last request was more than 30 minutes ago
             session_unset();     // unset $_SESSION variable for the run-time
             session_destroy();   // destroy session data in storage
-            self::flash('INFO',
-                        'Session udlÃ¸b. Login igen eller vÃ¦lg "husk mig".');
         }
 
         self::set('LAST_ACTIVITY', time()); // update last activity time stamp

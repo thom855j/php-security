@@ -1,9 +1,12 @@
 <?php
-namespace thom855j\security;
+namespace thom855j\PHPSecurity;
 
 class Password
 {
 
+    /*
+     * Hash a password with a salt
+     */
     public static
             function hash($input, $rounds = 7)
     {
@@ -16,16 +19,13 @@ class Password
         return crypt($input, sprintf('$2y$%02d$', $rounds) . $salt);
     }
 
+    /*
+     * Verify that the input is indeed the hashed password
+     */
     public static
             function verify($input, $data)
     {
         return crypt($input, $data) === $data;
-    }
-
-    public static
-            function check($input, $data)
-    {
-        return crypt($input, $data);
     }
 
 }

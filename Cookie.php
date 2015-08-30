@@ -1,8 +1,12 @@
 <?php
-namespace thom855j\security;
+
+namespace thom855j\PHPSecurity;
 
 class Cookie
 {
+    /*
+     * Check if cookie exists by name
+     */
 
     public static
             function exists($name)
@@ -10,11 +14,19 @@ class Cookie
         return (isset($_COOKIE[$name])) ? true : false;
     }
 
+    /*
+     * Get cookie value by name
+     */
+
     public static
             function get($name)
     {
         return $_COOKIE[$name];
     }
+
+    /*
+     * Set a cookie and exipiry
+     */
 
     public static
             function set($name, $value, $expiry)
@@ -25,7 +37,10 @@ class Cookie
         }
         return false;
     }
-
+    
+/*
+ * Delete cookie by setting expiry to zero
+ */
     public static
             function delete($name)
     {

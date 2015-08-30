@@ -1,9 +1,12 @@
 <?php
-namespace thom855j\security;
+namespace thom855j\PHPSecurity;
 
 class Token
 {
-
+    
+/*
+ * Token genereates a random key and puts in in a session
+ */
     public static
             function generate($key, $length = 32)
     {
@@ -11,11 +14,18 @@ class Token
         return $_SESSION[$key] = base64_encode(openssl_random_pseudo_bytes($length));
     }
 
+    /*
+     * To see random keys generated
+     */
     public static
             function show($length = 32)
     {
         return base64_encode(openssl_random_pseudo_bytes($length));
     }
+    
+    /*
+     * Checks if token session is set. Usefull for validating forms for CRSF
+     */
 
     public static
             function check($key, $token)
