@@ -1,7 +1,6 @@
 <?php
 
-namespace thom855j\PHPAuth;
-use thom855j\PHPSql\DB;
+namespace thom855j\PHPSecurity;
 
 class Validator
 {
@@ -18,19 +17,19 @@ class Validator
             $_messages         = array();
 
     public
-            function __construct(DB $storage = null)
+            function __construct($storage = null)
     {
         $this->_messages = array(
-            0 => '.',
-            1 => ' is required',
-            2 => ' must contain ',
-            3 => ' characters',
-            4 => ' only ',
-            5 => ' needs to match ',
-            6 => ' already exists',
-            7 => ' is invalid.',
-            8 => ' Must only contain letters and numbers.',
-            9 => ' must not contain spaces.',
+            0  => '.',
+            1  => ' is required',
+            2  => ' must contain ',
+            3  => ' characters',
+            4  => ' only ',
+            5  => ' needs to match ',
+            6  => ' already exists',
+            7  => ' is invalid.',
+            8  => ' Must only contain letters and numbers.',
+            9  => ' must not contain spaces.',
             10 => ' must be a number.'
         );
         $this->_storage  = $storage;
@@ -55,7 +54,7 @@ class Validator
      */
 
     public
-            function check($source, $items = array())
+            function checkPost($source, $items = array())
     {
         $this->_passed = false;
         foreach ($items as $item => $rules)
@@ -104,13 +103,6 @@ class Validator
                             }
                             break;
 
-                        case 'validNumber':
-                            if (!filter_var($value, FILTER_VALIDATE_INT))
-                            {
-                                $this->addError("This date is not valid. Must be numeric.");
-                            }
-                            break;
-
                         case 'validEmail':
                             if (!filter_var($value, FILTER_VALIDATE_EMAIL))
                             {
@@ -126,22 +118,9 @@ class Validator
                             break;
 
                         case 'noSpaces':
-                            if (strpos($value,' '))
+                            if (strpos($value, ' '))
                             {
                                 $this->addError($item . $this->_messages[9]);
-                            }
-                            break;
-
-                        case 'validDate':
-                            $date = $value;
-
-                            $date = explode('-', $date);
-
-                            $date = checkdate($date[1], $date[2], $date[0]);
-
-                            if (!$date)
-                            {
-                                $this->addError("Date is invalid.");
                             }
                             break;
 
@@ -162,27 +141,57 @@ class Validator
     }
 
     public
-            function checkImage($source, $item, $options = array())
+            function checkFile($source, $options = array())
     {
+        $file_name = array_keys($options);
+        $filename  = $file_name[0];
+
         $this->_passed = false;
+        $count         = 0;
+
+        // Loop $_FILES to exeicute all files
+        foreach ($_FILES[$filename]['name'] as $f => $name)
+        {
+            if ($_FILES[$filename]['error'][$f] == 4)
+            {
+                continue; // Skip file if any error found
+            }
+            if ($_FILES[$filename]['error'][$f] == 0)
+            {
+                $names[]  = $name;
+                $ext[] = pathinfo($name, PATHINFO_EXTENSION);
+                $size[] = $_FILES[$filename]['size'][$f];
+                $count++; // Number of successfully uploaded file
+            }
+        }
+
+
         foreach ($options as $option => $rules)
         {
             foreach ($rules as $rule => $rule_value)
             {
 
-                $value  = trim($source[$item][$option]);
-                $option = $option;
-
-                if (!empty($value))
+                if (!empty($options))
                 {
                     switch ($rule)
                     {
                         case 'ext':
-                            $extension      = explode(".", $value);
-                            $file_extension = end($extension);
-                            if (!in_array($file_extension, $rule_value))
+                            foreach ($ext as $value)
                             {
-                                $this->addError("{$file_extension} extension not allowed! Please use " . implode(', ', $rule_value));
+                                if (!in_array($value, $rule_value))
+                                {
+                                    $this->addError("{$value} extension not allowed! Please use " . implode(', ', $rule_value). ". ");
+                                }
+                            }
+                            break;
+
+                        case 'size':
+                            foreach ($size as $value)
+                            {
+                                if ($value > $rule_value)
+                                {
+                                    $this->addError("File is too big! Please use a file less than " . $value);
+                                }
                             }
                             break;
                     }
