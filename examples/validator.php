@@ -51,7 +51,7 @@ if (isset($_POST['submit']))
         // name of file input field
         'files' => array(
             //allowed extensions for files
-            'ext'  => array('png'),
+            'ext'  => array('png','jpg','jpeg'),
             //set allowed size in bytes
             'size' => 20
         )
