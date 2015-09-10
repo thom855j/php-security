@@ -1,7 +1,7 @@
 <?php
 
 // load file
-require_once '../Hash.php';
+require_once '../src/Hash.php';
 
 // use namespace
 use thom855j\PHPSecurity\Hash;

@@ -1,7 +1,7 @@
 <?php
 
 // load file
-require_once '../Token.php';
+require_once '../src/Token.php';
 
 // use namespace
 use thom855j\PHPSecurity\Token;

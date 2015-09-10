@@ -2,7 +2,7 @@
 if (isset($_POST['submit']))
 {
     // load file
-    require_once '../Validator.php';
+    require_once '../src/Validator.php';
 
 // instanciate object.
 // optional, if you are going to check for username etc. is taken

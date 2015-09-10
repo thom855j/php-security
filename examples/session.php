@@ -1,7 +1,7 @@
 <?php
 
 // load file
-require_once '../Session.php';
+require_once '../src/Session.php';
 
 // use namespace
 use thom855j\PHPSecurity\Session;

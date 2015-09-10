@@ -1,7 +1,7 @@
 <?php
 
 // load file
-require_once '../Cookie.php';
+require_once '../src/Cookie.php';
 
 // use namespace
 use thom855j\PHPSecurity\Cookie;

@@ -1,7 +1,7 @@
 <?php
 
 // load file
-require_once '../Password.php';
+require_once '../src/Password.php';
 
 // use namespace
 use thom855j\PHPSecurity\Password;
