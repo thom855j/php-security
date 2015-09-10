@@ -1,5 +1,5 @@
 <?php
-namespace thom855j\php_security;
+namespace thom855j\PHPSecurity;
 
 class Token
 {
