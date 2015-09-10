@@ -1,5 +1,5 @@
 <?php
-namespace thom855j\php_security;
+namespace thom855j\Security;
 
 class Session
 {
