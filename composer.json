@@ -2,6 +2,7 @@
         "name": "thom855j/php-security",
         "license": "MIT",
         "description": "Simple classes to use in php for security",
+        "minimum-stability": "dev-master",
         "require": {
         "php": ">=5.4.0"
         }
