@@ -1,4 +1,5 @@
 <?php
+
 namespace thom855j\PHPSecurity;
 
 class Session
@@ -20,15 +21,17 @@ class Session
     /*
      * Check if session exists or not
      */
+
     public static
             function exists($name)
     {
         return (isset($_SESSION[$name])) ? true : false;
     }
-    
+
     /*
      * Set a session by key and value
      */
+
     public static
             function set($key, $value)
     {
@@ -43,23 +46,25 @@ class Session
      * @param mixed $value
      */
     public static
-            function add($key, $value)
+            function addKey($key, $name, $value)
     {
-        $_SESSION[$key][] = $value;
+        $_SESSION[$key][$name] = $value;
     }
 
     /*
      * Get a session value by key
      */
+
     public static
             function get($key)
     {
         return $_SESSION[$key];
     }
-    
-/*
- * Get a sessions array value by key and value
- */
+
+    /*
+     * Get a sessions array value by key and value
+     */
+
     public static
             function getKey($key, $name)
     {
@@ -69,6 +74,7 @@ class Session
     /*
      * Delete key value from session array
      */
+
     public static
             function deleteKey($key, $value)
     {
@@ -78,6 +84,7 @@ class Session
     /*
      * Arra push to arrays together
      */
+
     public static
             function push($key, $value)
     {
@@ -87,6 +94,7 @@ class Session
     /*
      * Delete session by key name
      */
+
     public static
             function delete($key)
     {
@@ -108,6 +116,7 @@ class Session
     /*
      * Flash messages by deleting session after it is shown
      */
+
     public static
             function flash($key, $string = null)
     {
@@ -120,32 +129,6 @@ class Session
         else
         {
             self::set($key, $string);
-        }
-    }
-
-    public static
-            function check($expiry = 1800)
-    {
-        //Check for user activity
-        if (self::exists('LAST_ACTIVITY') && (time() - self::get('LAST_ACTIVITY')
-                > $expiry))
-        {
-            // last request was more than 30 minutes ago
-            session_unset();     // unset $_SESSION variable for the run-time
-            session_destroy();   // destroy session data in storage
-        }
-
-        self::set('LAST_ACTIVITY', time()); // update last activity time stamp
-
-        if (!self::exists('CREATED'))
-        {
-            self::set('CREATED', time());
-        }
-        else if (time() - self::get('CREATED') > $expiry)
-        {
-            // session started more than 30 minutes ago
-            session_regenerate_id(true);    // change session ID for the current session and invalidate old session ID
-            self::set('CREATED', time()); // update creation time
         }
     }
 

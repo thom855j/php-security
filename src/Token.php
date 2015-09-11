@@ -18,7 +18,7 @@ class Token
      * To see random keys generated
      */
     public static
-            function show($length = 32)
+            function create($length = 32)
     {
         return base64_encode(openssl_random_pseudo_bytes($length));
     }

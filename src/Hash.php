@@ -4,41 +4,22 @@ namespace thom855j\PHPSecurity;
 
 class Hash
 {
+
     /*
      * Create a random hash string
      */
 
     public static
-            function create($string, $salt = '')
-    {
-        return hash('sha256', $string . $salt);
-    }
-
-    /*
-     * Create a random string
-     */
-
-    public static
             function rand($length)
     {
-        $chars = '~)!abc}def#ghijkl[m-no.pqrs]tu;v|wx+yzA%BC(D:EF{GHI&JKLM=NOP*QRS?TUVWXYZ_0123456789';
-        $str   = '';
+        $chars = '~)!abc}def#ghijkl[m-no.pqrs]tu;v|wx+yzA%BC(D:EF{GHI&JKLM=NOP*QRS?TU4567VWXYZ_012389' .uniqid();
+        $str   =  '';
         $size  = strlen($chars);
         for ($i = 0; $i < $length; $i++)
         {
             $str .= $chars[rand(0, $size - 1)];
         }
         return $str;
-    }
-
-    /*
-     * Create a nu unique hash
-     */
-
-    public static
-            function unique($salt = null)
-    {
-        return self::create(uniqid(), $salt);
     }
 
     /*
