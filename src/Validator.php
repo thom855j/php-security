@@ -14,25 +14,26 @@ class Validator
             $_errors          = array(),
             $_storage         = null;
     public
-            $_messages         = array();
+            $feedback          = array();
 
     public
             function __construct($storage = null)
     {
-        $this->_messages = array(
-            0  => '.',
-            1  => ' is required',
-            2  => ' must contain ',
-            3  => ' characters',
-            4  => ' only ',
-            5  => ' needs to match ',
-            6  => ' already exists',
-            7  => ' is invalid.',
-            8  => ' Must only contain letters and numbers.',
-            9  => ' must not contain spaces.',
-            10 => ' must be a number.'
+        $this->feedback = array(
+            'req'     => ' is required.',
+            'min'     => ' must min contain ',
+            'max'     => ' must max contain ',
+            'chars'   => ' characters. ',
+            'match'   => ' needs to match ',
+            'exists'  => ' already exists.',
+            'invalid' => ' is invalid.',
+            'input'   => ' Must only contain letters and numbers. ',
+            'spaces'  => ' must not contain spaces.',
+            'number'  => ' must be a number.',
+            'ext'     => ' extension not allowed! Please use ',
+            'size'    => 'File is too big! Please use a file less than '
         );
-        $this->_storage  = $storage;
+        $this->_storage = $storage;
     }
 
     /*
@@ -68,7 +69,7 @@ class Validator
                 if ($rule === 'required' && empty($value))
                 {
 
-                    $this->addError(ucfirst($item) . $this->_messages[1]);
+                    $this->addError(ucfirst($item) . $this->feedback['req']);
                 }
                 else if (!empty($value))
                 {
@@ -77,21 +78,21 @@ class Validator
                         case 'min':
                             if (strlen($value) < $rule_value)
                             {
-                                $this->addError(ucfirst($item) . $this->_messages[2] . $rule_value . $this->_messages[3]);
+                                $this->addError(ucfirst($item) . $this->feedback['min'] . $rule_value . $this->feedback['chars']);
                             }
                             break;
 
                         case 'max':
                             if (strlen($value) > $rule_value)
                             {
-                                $this->addError(ucfirst($item) . $this->_messages[2] . $this->_messages[4] . $rule_value . $this->_messages[3]);
+                                $this->addError(ucfirst($item) . $this->feedback['max'] . $rule_value . $this->feedback['chars']);
                             }
                             break;
 
                         case 'matches':
                             if ($value != $source[$rule_value])
                             {
-                                $this->addError(ucfirst($rule_value) . $this->_messages[5] . $item);
+                                $this->addError(ucfirst($rule_value) . $this->feedback['match'] . $item);
                             }
                             break;
 
@@ -99,35 +100,35 @@ class Validator
                             $check = $this->_storage->get(array($item), $rule_value, array(array($item, '=', $value)));
                             if ($check->count())
                             {
-                                $this->addError($item . $this->_messages[5]);
+                                $this->addError(ucfirst($item) . $this->feedback['exists']);
                             }
                             break;
 
                         case 'validEmail':
                             if (!filter_var($value, FILTER_VALIDATE_EMAIL))
                             {
-                                $this->addError("This {$item} is invalid. Must be like email@mail.com.");
+                                $this->addError(ucfirst($item) . $this->feedback['invalid']);
                             }
                             break;
 
                         case 'validInput':
                             if (!preg_match('/^[0-9A-Za-z\æ\ø\å\s]{3,}$/', $value))
                             {
-                                $this->addError($item . $this->_messages[7] . $this->_messages[8]);
+                                $this->addError(ucfirst($item) . $this->feedback['invalid'] . $this->feedback['input']);
                             }
                             break;
 
                         case 'noSpaces':
                             if (strpos($value, ' '))
                             {
-                                $this->addError($item . $this->_messages[9]);
+                                $this->addError(ucfirst($item) . $this->feedback['spaces']);
                             }
                             break;
 
                         case 'validNumber':
                             if (!is_numeric($value))
                             {
-                                $this->addError("{$item} must be a number.");
+                                $this->addError(ucfirst($item) . $this->feedback['number']);
                             }
                             break;
                     }
@@ -145,63 +146,79 @@ class Validator
     {
         $file_name = array_keys($options);
         $filename  = $file_name[0];
-
-        $this->_passed = false;
-        $count         = 0;
-
-        // Loop $_FILES to exeicute all files
-        foreach ($_FILES[$filename]['name'] as $f => $name)
+        if (!empty($source[$filename]['name'][0]))
         {
-            if ($_FILES[$filename]['error'][$f] == 4)
-            {
-                continue; // Skip file if any error found
-            }
-            if ($_FILES[$filename]['error'][$f] == 0)
-            {
-                $names[]  = $name;
-                $ext[] = pathinfo($name, PATHINFO_EXTENSION);
-                $size[] = $_FILES[$filename]['size'][$f];
-                $count++; // Number of successfully uploaded file
-            }
-        }
 
+            $this->_passed = false;
+            $count         = 0;
 
-        foreach ($options as $option => $rules)
-        {
-            foreach ($rules as $rule => $rule_value)
+            // Loop $_FILES to exeicute all files
+            foreach ($source[$filename]['name'] as $f => $name)
             {
-
-                if (!empty($options))
+                if ($source[$filename]['error'][$f] == 4)
                 {
-                    switch ($rule)
-                    {
-                        case 'ext':
-                            foreach ($ext as $value)
-                            {
-                                if (!in_array($value, $rule_value))
-                                {
-                                    $this->addError("{$value} extension not allowed! Please use " . implode(', ', $rule_value). ". ");
-                                }
-                            }
-                            break;
+                    continue; // Skip file if any error found
+                }
+                if ($source[$filename]['error'][$f] == 0)
+                {
+                    $names[] = $name;
+                    $ext[]   = pathinfo($name, PATHINFO_EXTENSION);
+                    $size[]  = $source[$filename]['size'][$f];
+                    $count++; // Number of successfully uploaded file
+                }
+            }
 
-                        case 'size':
-                            foreach ($size as $value)
-                            {
-                                if ($value > $rule_value)
+
+            foreach ($options as $option => $rules)
+            {
+                foreach ($rules as $rule => $rule_value)
+                {
+
+                    if (!empty($options))
+                    {
+                        switch ($rule)
+                        {
+                            case 'ext':
+                                foreach ($ext as $value)
                                 {
-                                    $this->addError("File is too big! Please use a file less than " . $value);
+                                    if (!in_array($value, $rule_value))
+                                    {
+                                        $this->addError("'.{$value}'" . $this->feedback['ext'] . implode(', ', $rule_value));
+                                    }
                                 }
-                            }
-                            break;
+                                break;
+
+                            case 'size':
+                                foreach ($size as $value)
+                                {
+                                    if ($value > $rule_value)
+                                    {
+                                        $this->addError($this->feedback['size'] . $this->bytesToSize($value));
+                                    }
+                                }
+                                break;
+                        }
                     }
                 }
             }
+
+            $this->_passed = (empty($this->_errors)) ? true : false;
+
+            return $this;
         }
+        return false;
+    }
 
-        $this->_passed = (empty($this->_errors)) ? true : false;
+    public
+            function bytesToSize($bytes, $precision = 2,$powers = 1000)
+    {
+        // human readable format -- powers of 1024
+        //
+    $unit = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB');
 
-        return $this;
+        return @round(
+                        $bytes / pow($powers, ($i = floor(log($bytes, $powers)))), $precision
+                ) . ' ' . $unit[$i];
     }
 
     private
@@ -211,9 +228,9 @@ class Validator
     }
 
     public
-            function addMessage($key, $message)
+            function setFeedback($key, $feedback)
     {
-        $this->_messages[] = array($key => $message);
+        $this->feedback[$key] = $feedback;
     }
 
     public

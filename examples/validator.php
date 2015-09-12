@@ -8,6 +8,8 @@ if (isset($_POST['submit']))
 // optional, if you are going to check for username etc. is taken
 // you have to inject a db class in the constructor.
     $v = new thom855j\PHPSecurity\Validator();
+    
+    $v->setFeedback('req', '  is bullshit!');
 
 // all error messages are returned with the name of the input field
 
@@ -24,8 +26,8 @@ if (isset($_POST['submit']))
             'min'      => 8,
             // max length
             'max'      => 20,
-            // the username is NOT in db
-            'notTaken' => 'users'
+        // the username is NOT in db
+        //'notTaken' => 'users'
         ),
         'password' => array(
             'required'   => true,
@@ -47,23 +49,32 @@ if (isset($_POST['submit']))
     /*
      * Form validation for $_FILES
      */
-    $v->checkFile($_FILES, array(
-        // name of file input field
-        'files' => array(
-            //allowed extensions for files
-            'ext'  => array('png','jpg','jpeg'),
-            //set allowed size in bytes
-            'size' => 20
-        )
-    ));
+        $v->checkFile($_FILES, array(
+            // name of file input field
+            'files' => array(
+                //allowed extensions for files
+                'ext'  => array('png', 'jpg', 'jpeg'),
+                //set allowed size in bytes
+                'size' => 1000000
+            )
+        ));
 
-    // if validation did not pass (there was errors somewhere
-    if (!$v->passed())
-    {
-        // gather the errorrs and echo them out
-        foreach ($v->errors() as $error)
+        // if validation did not pass (there was errors somewhere
+        if (!$v->passed())
         {
-            echo $error;
+            // gather the errorrs and echo them out
+            foreach ($v->errors() as $error)
+            {
+                echo $error .'<br>';
+            }
         }
     }
-}
+
+?>
+<form action="" method="post" enctype='multipart/form-data'>
+    <input type="text" name="username">
+    <input type="text" name="password" autocomplete="off">
+    <input type="text" name="email" autocomplete="off">
+    <input type="file" name="files[]">
+    <input type="submit" name="submit">
+</form>
