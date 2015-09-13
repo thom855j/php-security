@@ -10,14 +10,14 @@ class Validator
             $_instance = null;
     // containers
     private
-            $_passed          = false,
-            $_errors          = array(),
-            $_storage         = null;
+            $passed           = false,
+            $errors           = array(),
+            $db               = null;
     public
             $feedback          = array();
 
     public
-            function __construct($storage = null)
+            function __construct($db = null)
     {
         $this->feedback = array(
             'req'     => ' is required.',
@@ -33,7 +33,7 @@ class Validator
             'ext'     => ' extension not allowed! Please use ',
             'size'    => 'File is too big! Please use a file less than '
         );
-        $this->_storage = $storage;
+        $this->db       = $db;
     }
 
     /*
@@ -41,13 +41,19 @@ class Validator
      */
 
     public static
-            function load($storage = null)
+            function load($db = null)
     {
         if (!isset(self::$_instance))
         {
-            self::$_instance = new Validator($storage);
+            self::$_instance = new Validator($db);
         }
         return self::$_instance;
+    }
+
+    public
+            function setAttribute($attribute, $name)
+    {
+        $this->$attribute = $name;
     }
 
     /*
@@ -57,7 +63,7 @@ class Validator
     public
             function checkPost($source, $items = array())
     {
-        $this->_passed = false;
+        $this->passed = false;
         foreach ($items as $item => $rules)
         {
             foreach ($rules as $rule => $rule_value)
@@ -97,7 +103,7 @@ class Validator
                             break;
 
                         case 'notTaken':
-                            $check = $this->_storage->get(array($item), $rule_value, array(array($item, '=', $value)));
+                            $check = $this->db->get(array($item), $rule_value, array(array($item, '=', $value)));
                             if ($check->count())
                             {
                                 $this->addError(ucfirst($item) . $this->feedback['exists']);
@@ -136,7 +142,7 @@ class Validator
             }
         }
 
-        $this->_passed = (empty($this->_errors)) ? true : false;
+        $this->passed = (empty($this->errors)) ? true : false;
 
         return $this;
     }
@@ -149,8 +155,8 @@ class Validator
         if (!empty($source[$filename]['name'][0]))
         {
 
-            $this->_passed = false;
-            $count         = 0;
+            $this->passed = false;
+            $count        = 0;
 
             // Loop $_FILES to exeicute all files
             foreach ($source[$filename]['name'] as $f => $name)
@@ -202,7 +208,7 @@ class Validator
                 }
             }
 
-            $this->_passed = (empty($this->_errors)) ? true : false;
+            $this->passed = (empty($this->errors)) ? true : false;
 
             return $this;
         }
@@ -210,7 +216,7 @@ class Validator
     }
 
     public
-            function bytesToSize($bytes, $precision = 2,$powers = 1000)
+            function bytesToSize($bytes, $precision = 2, $powers = 1000)
     {
         // human readable format -- powers of 1024
         //
@@ -224,7 +230,7 @@ class Validator
     private
             function addError($errors)
     {
-        $this->_errors[] = $errors;
+        $this->errors[] = $errors;
     }
 
     public
@@ -236,13 +242,13 @@ class Validator
     public
             function errors()
     {
-        return $this->_errors;
+        return $this->errors;
     }
 
     public
             function passed()
     {
-        return $this->_passed;
+        return $this->passed;
     }
 
 }

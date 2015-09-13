@@ -8,7 +8,7 @@ if (isset($_POST['submit']))
 // optional, if you are going to check for username etc. is taken
 // you have to inject a db class in the constructor.
     $v = new thom855j\PHPSecurity\Validator();
-    
+
     $v->setFeedback('req', '  is bullshit!');
 
 // all error messages are returned with the name of the input field
@@ -49,27 +49,26 @@ if (isset($_POST['submit']))
     /*
      * Form validation for $_FILES
      */
-        $v->checkFile($_FILES, array(
-            // name of file input field
-            'files' => array(
-                //allowed extensions for files
-                'ext'  => array('png', 'jpg', 'jpeg'),
-                //set allowed size in bytes
-                'size' => 1000000
-            )
-        ));
+    $v->checkFile($_FILES, array(
+        // name of file input field
+        'files' => array(
+            //allowed extensions for files
+            'ext'  => array('png', 'jpg', 'jpeg'),
+            //set allowed size in bytes
+            'size' => 1000000
+        )
+    ));
 
-        // if validation did not pass (there was errors somewhere
-        if (!$v->passed())
+    // if validation did not pass (there was errors somewhere
+    if (!$v->passed())
+    {
+        // gather the errorrs and echo them out
+        foreach ($v->errors() as $error)
         {
-            // gather the errorrs and echo them out
-            foreach ($v->errors() as $error)
-            {
-                echo $error .'<br>';
-            }
+            echo $error . '<br>';
         }
     }
-
+}
 ?>
 <form action="" method="post" enctype='multipart/form-data'>
     <input type="text" name="username">

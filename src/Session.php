@@ -126,10 +126,7 @@ class Session
             self::delete($key);
             return $session;
         }
-        else
-        {
-            self::set($key, $string);
-        }
+        return false;
     }
 
 }
