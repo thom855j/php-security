@@ -103,10 +103,10 @@ class Validator
                             break;
 
                         case 'notTaken':
-                            $check = $this->db->get(array($item), $rule_value, array(array($item, '=', $value)));
+                            $check = $this->db->select(array($item), $rule_value,null, array(array($item, '=', $value)));
                             if ($check->count())
                             {
-                                $this->addError(ucfirst($item) . $this->feedback['exists']);
+                                $this->addError("'$value'" . $this->feedback['exists']);
                             }
                             break;
 
