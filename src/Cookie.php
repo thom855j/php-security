@@ -1,6 +1,6 @@
 <?php
 
-namespace thom855j\PHPSecurity;
+namespace WebSupportDK\PHPSecurity;
 
 class Cookie
 {
