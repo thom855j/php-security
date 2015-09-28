@@ -1,14 +1,14 @@
 {
-        "name": "thom855j/php-security",
+        "name": "websupport-dk/php-security",
         "version": "dev-master",
         "license": "MIT",
         "description": "Simple classes to use in php for security",
         "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.5.0"
         },
     "autoload": {
         "psr-4": {
-            "thom855j\\PHPSecurity\\": "src/"
+            "WebSupportDK\\PHPSecurity\\": "src/"
             }
         }
 }
