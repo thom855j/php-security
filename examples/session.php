@@ -4,7 +4,7 @@
 require_once '../src/Session.php';
 
 // use namespace
-use thom855j\PHPSecurity\Session;
+use Datalaere\PHPSecurity\Session;
 
 /*
  * Init session (session start and check if session is already set

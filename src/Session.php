@@ -1,6 +1,6 @@
 <?php
 
-namespace WebSupportDK\PHPSecurity;
+namespace Datalaere\PHPSecurity;
 
 class Session
 {
@@ -8,12 +8,10 @@ class Session
     /**
      * starts a session
      */
-    public static
-            function init()
+    public static function init()
     {
         // if no session exist, start a new session
-        if (session_id() == '')
-        {
+        if (session_id() == '') {
             session_start();
         }
     }
@@ -21,9 +19,7 @@ class Session
     /*
      * Check if session exists or not
      */
-
-    public static
-            function exists($name)
+    public static function exists($name)
     {
         return (isset($_SESSION[$name])) ? true : false;
     }
@@ -31,9 +27,7 @@ class Session
     /*
      * Set a session by key and value
      */
-
-    public static
-            function set($key, $value)
+    public static function set($key, $value)
     {
         return $_SESSION[$key] = $value;
     }
@@ -41,12 +35,8 @@ class Session
     /**
      * Adds a value as a new array element to the key.
      * useful for collecting error messages etc
-     *
-     * @param mixed $key
-     * @param mixed $value
      */
-    public static
-            function addKey($key, $name, $value)
+    public static function addKey($key, $name, $value)
     {
         $_SESSION[$key][$name] = $value;
     }
@@ -54,9 +44,7 @@ class Session
     /*
      * Get a session value by key
      */
-
-    public static
-            function get($key)
+    public static function get($key)
     {
         return $_SESSION[$key];
     }
@@ -64,9 +52,7 @@ class Session
     /*
      * Get a sessions array value by key and value
      */
-
-    public static
-            function getKey($key, $name)
+    public static function getKey($key, $name)
     {
         return $_SESSION[$key][$name];
     }
@@ -74,9 +60,7 @@ class Session
     /*
      * Delete key value from session array
      */
-
-    public static
-            function deleteKey($key, $value)
+    public static function deleteKey($key, $value)
     {
         unset($_SESSION[$key][$value]);
     }
@@ -84,9 +68,7 @@ class Session
     /*
      * Arra push to arrays together
      */
-
-    public static
-            function push($key, $value)
+    public static function push($key, $value)
     {
         return array_push($_SESSION[$key], $value);
     }
@@ -94,9 +76,7 @@ class Session
     /*
      * Delete session by key name
      */
-
-    public static
-            function delete($key)
+    public static function delete($key)
     {
         if (self::exists($key))
         {
@@ -107,8 +87,7 @@ class Session
     /**
      * deletes the session (= logs the user out)
      */
-    public static
-            function destroy()
+    public static function destroy()
     {
         session_destroy();
     }
@@ -116,16 +95,14 @@ class Session
     /*
      * Flash messages by deleting session after it is shown
      */
-
-    public static
-            function flash($key, $string = null)
+    public static function flash($key, $string = null)
     {
-        if ((self::exists($key)))
-        {
+        if ((self::exists($key))) {
             $session = self::get($key);
             self::delete($key);
             return $session;
         }
+
         return false;
     }
 

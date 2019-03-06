@@ -1,15 +1,13 @@
 <?php
 
-namespace WebSupportDK\PHPSecurity;
+namespace Datalaere\PHPSecurity;
 
 class Cookie
 {
     /*
      * Check if cookie exists by name
      */
-
-    public static
-            function exists($name)
+    public static function exists($name)
     {
         return (isset($_COOKIE[$name])) ? true : false;
     }
@@ -17,9 +15,7 @@ class Cookie
     /*
      * Get cookie value by name
      */
-
-    public static
-            function get($name)
+    public static function get($name)
     {
         return $_COOKIE[$name];
     }
@@ -27,22 +23,19 @@ class Cookie
     /*
      * Set a cookie and exipiry
      */
-
-    public static
-            function set($name, $value, $expiry)
+    public static function set($name, $value, $expiry)
     {
-        if (setcookie($name, $value, time() + $expiry, '/', null, null, true))
-        {
+        if (setcookie($name, $value, time() + $expiry, '/', null, null, true)) {
             return true;
         }
+        
         return false;
     }
     
-/*
- * Delete cookie by setting expiry to zero
- */
-    public static
-            function delete($name)
+    /*
+     * Delete cookie by setting expiry to zero
+     */
+    public static function delete($name)
     {
         self::set($name, '', time() - 1);
     }

@@ -7,7 +7,7 @@ if (isset($_POST['submit']))
 // instanciate object.
 // optional, if you are going to check for username etc. is taken
 // you have to inject a db class in the constructor.
-    $v = new thom855j\PHPSecurity\Validator();
+    $v = new Datalaere\PHPSecurity\Validator();
 
     $v->setFeedback('req', '  is bullshit!');
 

@@ -4,7 +4,7 @@
 require_once '../src/Password.php';
 
 // use namespace
-use thom855j\PHPSecurity\Password;
+use Datalaere\PHPSecurity\Password;
 
 /*
 * Hash a password with a salt

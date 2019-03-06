@@ -1,5 +1,5 @@
 {
-        "name": "websupport-dk/php-security",
+        "name": "datalaere/php-security",
         "version": "dev-master",
         "license": "MIT",
         "description": "Simple classes to use in php for security",
@@ -8,7 +8,7 @@
         },
     "autoload": {
         "psr-4": {
-            "WebSupportDK\\PHPSecurity\\": "src/"
+            "Datalaere\\PHPSecurity\\": "src/"
             }
         }
 }

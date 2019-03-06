@@ -4,7 +4,7 @@
 require_once '../src/Token.php';
 
 // use namespace
-use thom855j\PHPSecurity\Token;
+use Datalaere\PHPSecurity\Token;
 
 /*
  * Token genereates a random key and puts in in a session

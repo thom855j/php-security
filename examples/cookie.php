@@ -4,7 +4,7 @@
 require_once '../src/Cookie.php';
 
 // use namespace
-use thom855j\PHPSecurity\Cookie;
+use Datalaere\PHPSecurity\Cookie;
 
 /*
 * Check if cookie exists by name

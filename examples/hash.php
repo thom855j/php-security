@@ -4,7 +4,7 @@
 require_once '../src/Hash.php';
 
 // use namespace
-use thom855j\PHPSecurity\Hash;
+use Datalaere\PHPSecurity\Hash;
 
 /*
 * Create a random hash string
