@@ -1,6 +1,6 @@
 <?php
 
-namespace Datalaere\PHPSecurity;
+namespace PHP\Security;
 
 class Cookie
 {

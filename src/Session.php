@@ -1,6 +1,6 @@
 <?php
 
-namespace Datalaere\PHPSecurity;
+namespace PHP\Security;
 
 class Session
 {
@@ -8,7 +8,7 @@ class Session
     /**
      * starts a session
      */
-    public static function init()
+    public static function start()
     {
         // if no session exist, start a new session
         if (session_id() == '') {

@@ -1,12 +1,9 @@
 <?php
 
-namespace Datalaere\PHPSecurity;
+namespace PHP\Security;
 
 class Validator
 {
-
-    // object instance
-    private static $_instance = null;
 
     // containers
     private
@@ -34,18 +31,6 @@ class Validator
         );
 
         $this->db = $db;
-    }
-
-    /*
-     * Instantiate object
-     */
-    public static function load($db = null)
-    {
-        if (!isset(self::$_instance)) {
-            self::$_instance = new Validator($db);
-        }
-
-        return self::$_instance;
     }
 
     public function setAttribute($attribute, $name)
